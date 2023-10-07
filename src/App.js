@@ -54,17 +54,21 @@ class App extends Component {
   }
 
   decrementCartItemQuantity = id => {
-    this.setState(
-      prevState => ({
+    const {cartList} = this.state
+    const productObject = cartList.find(eachProduct => eachProduct.id === id)
+    if (productObject.quantity > 1) {
+      this.setState(prevState => ({
         cartList: prevState.cartList.map(each => {
-          if (each.id === id) {
-            return {...each, quantity: each.quantity - 1}
+          if (id === each.id) {
+            const updatedQuantity = each.quantity - 1
+            return {...each, quantity: updatedQuantity}
           }
           return each
         }),
-      }),
-      this.getTheTotalPrice,
-    )
+      }))
+    } else {
+      this.removeCartItem(id)
+    }
   }
 
   getTheQuantity = id => {
